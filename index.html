@@ -1,0 +1,1059 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 教育/题库工具导航站（教研增长台）｜覆盖·质量·效率</title>
+  <meta name="description" content="AI 教育/题库教研增长台：覆盖率、题目质量、批改口径与课程节奏一站式工具入口。支持分类、搜索、收藏与推荐；纯前端单页可直接部署。" />
+  <meta property="og:title" content="AI 教育/题库教研增长台" />
+  <meta property="og:description" content="覆盖·质量·效率：把教研流程做成可复用生产线。" />
+  <meta property="og:type" content="website" />
+  <style>
+    :root{
+      --bg:#070a12;
+      --panel:#0b1222;
+      --panel2:#0f172a;
+      --text:#e6edf7;
+      --muted: rgba(230,237,247,.68);
+      --line: rgba(230,237,247,.12);
+      --shadow:0 12px 34px rgba(0,0,0,.40);
+      --accent:#22c55e;
+      --accent2:#38bdf8;
+      --good:#22c55e;
+      --warn:#fbbf24;
+      --radius:12px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(34,197,94,.18), transparent 60%),
+        radial-gradient(900px 500px at 100% 0%, rgba(56,189,248,.14), transparent 55%),
+        radial-gradient(900px 500px at 0% 100%, rgba(251,191,36,.10), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+      line-height:1.5;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1180px;margin:0 auto;padding:14px}
+    .topbar{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(7,10,18,.92), rgba(7,10,18,.70));
+      border-bottom:1px solid var(--line);
+    }
+    .topbar-inner{display:flex;align-items:center;gap:14px;justify-content:space-between;padding:14px 20px;max-width:1180px;margin:0 auto}
+    .brand{display:flex;align-items:center;gap:10px;min-width:260px}
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      background: radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.20), transparent 60%),
+                  linear-gradient(135deg, rgba(34,197,94,1), rgba(56,189,248,.75));
+      box-shadow: 0 10px 20px rgba(56,189,248,.18);
+    }
+    .brand-title{font-weight:900;letter-spacing:.2px}
+    .brand-sub{font-size:12px;color:var(--muted);margin-top:1px}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1}
+    .actions{display:flex;align-items:center;gap:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      border:1px solid var(--line);
+      background: rgba(15,23,42,.65);
+      color:var(--text);
+      border-radius:999px;
+      padding:10px 14px;
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(56,189,248,.30)}
+    .btn.primary{background: linear-gradient(135deg, rgba(34,197,94,1), rgba(56,189,248,.92)); border-color: rgba(56,189,248,.35); color:#041019; font-weight:900}
+    .btn.ghost{background:transparent}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      background: rgba(15,23,42,.55);
+      border:1px solid var(--line);
+      font-size:12px;color:rgba(230,237,247,.86);
+    }
+    .pill b{color: rgba(167,243,208,.95)}
+    .layout{display:grid;grid-template-columns: 1fr 320px;gap:18px;margin-top:12px}
+    .panel{
+      background: rgba(15,23,42,.60);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .panel.pad{padding:14px}
+    .hero-banner{
+      border-radius: 18px;
+      background:
+        radial-gradient(700px 300px at 15% 20%, rgba(34,197,94,.28), transparent 55%),
+        radial-gradient(700px 300px at 85% 15%, rgba(56,189,248,.22), transparent 58%),
+        radial-gradient(420px 220px at 30% 80%, rgba(251,191,36,.14), transparent 60%),
+        linear-gradient(135deg, rgba(2,6,23,.88), rgba(2,6,23,.66));
+      box-shadow: 0 18px 60px rgba(0,0,0,.45);
+      padding: 14px 12px 16px;
+      border: 1px solid rgba(230,237,247,.10);
+    }
+    .hero-inner{max-width: 980px; margin: 0 auto; text-align:center}
+    .hero-title{font-size:22px; letter-spacing:.2px; margin:0; font-weight:920}
+    .hero-title{color:#fff}
+    .hero-search{
+      margin: 12px auto 0;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      width: min(760px, 100%);
+      padding: 12px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.24);
+      border: 1px solid rgba(230,237,247,.14);
+      box-shadow: 0 20px 60px rgba(0,0,0,.30);
+    }
+    .hero-search svg{opacity:.90;color:rgba(230,237,247,.92)}
+    .hero-search input{
+      flex:1;
+      border:0;
+      outline:0;
+      background:transparent;
+      color: rgba(230,237,247,.95);
+      font-size: 14px;
+    }
+    .hero-search input::placeholder{color: rgba(230,237,247,.70)}
+    .hero-meta{
+      margin: 10px auto 0;
+      width: min(760px, 100%);
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      color: rgba(230,237,247,.78);
+      font-size: 12px;
+    }
+    .hero-meta b{color:#fff}
+    .recommend-wrap{
+      margin-top: 12px;
+      border: 1px solid rgba(230,237,247,.10);
+      border-radius: 18px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      overflow:hidden;
+      background: rgba(15,23,42,.55);
+    }
+    .recommend-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(230,237,247,.10);
+      color: rgba(230,237,247,.86);
+      font-size:12.5px;
+    }
+    .recommend-left{display:flex;flex-direction:column;gap:6px;min-width:0}
+    .recommend-tabs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .seg{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(230,237,247,.12);
+      background: rgba(11,18,34,.55);
+      color: rgba(230,237,247,.86);
+      font-size:12px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .seg:hover{transform: translateY(-1px); border-color: rgba(56,189,248,.30)}
+    .seg.active{background: rgba(56,189,248,.14); border-color: rgba(56,189,248,.30); color: #eaffff}
+    .recommend-desc{font-size:12px;color: rgba(230,237,247,.72);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .recommend-body{padding: 10px 12px 12px}
+    .rec-grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:14px;
+    }
+    .rec-card{
+      border: 1px solid rgba(230,237,247,.12);
+      background: rgba(11,18,34,.60);
+      border-radius: 14px;
+      padding: 14px;
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      min-height: 92px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+    }
+    .rec-card:hover{transform: translateY(-2px); border-color: rgba(56,189,248,.28); box-shadow: 0 14px 30px rgba(0,0,0,.25)}
+    .rec-icon{
+      width:46px;height:46px;border-radius:16px;
+      display:flex;align-items:center;justify-content:center;
+      background: radial-gradient(10px 10px at 30% 30%, rgba(255,255,255,.12), transparent 62%),
+        linear-gradient(135deg, rgba(34,197,94,.32), rgba(56,189,248,.22));
+      color: rgba(230,237,247,.92);
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+    .rec-icon img{width:100%;height:100%;object-fit:cover;display:block}
+    .rec-icon svg{width:22px;height:22px}
+    .rec-text{min-width:0;display:flex;flex-direction:column;gap:4px}
+    .rec-name{font-weight:900;font-size:13px;color: rgba(230,237,247,.92);line-height:1.2}
+    .rec-sub{font-size:12px;color: rgba(230,237,247,.72);white-space:normal;overflow:visible;line-height:1.35}
+    .rec-hint{margin-top:10px;font-size:12px;color: rgba(230,237,247,.72)}
+    .tabs{
+      display:flex;
+      flex-wrap:nowrap;
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+      gap:8px;
+      padding:10px 12px;
+      border-top:1px solid rgba(230,237,247,.10);
+    }
+    .tab{
+      padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(230,237,247,.12);
+      background: rgba(11,18,34,.55);
+      color: rgba(230,237,247,.86);
+      font-size:12px;
+      white-space:nowrap;
+      cursor:pointer;
+      transition: background .12s ease, border-color .12s ease, transform .12s ease;
+    }
+    .tab:hover{transform: translateY(-1px); border-color: rgba(56,189,248,.30)}
+    .tab.active{
+      background: rgba(56,189,248,.14);
+      border-color: rgba(56,189,248,.30);
+      color: #eaffff;
+    }
+    .cat-quick{
+      display:flex;
+      gap:10px;
+      padding: 10px 12px 12px;
+      border-top: 1px solid rgba(230,237,247,.10);
+      overflow-x:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .cat-btn{
+      border: 1px solid rgba(230,237,247,.12);
+      background: rgba(11,18,34,.60);
+      border-radius: 14px;
+      padding: 9px 10px 10px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      user-select:none;
+      min-width: 92px;
+      transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+    }
+    .cat-btn:hover{transform: translateY(-2px); border-color: rgba(56,189,248,.28); box-shadow: 0 14px 30px rgba(0,0,0,.25)}
+    .cat-btn.active{border-color: rgba(56,189,248,.34); box-shadow: 0 14px 30px rgba(56,189,248,.10)}
+    .cat-ico{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: radial-gradient(10px 10px at 30% 30%, rgba(255,255,255,.12), transparent 62%),
+        linear-gradient(135deg, rgba(34,197,94,.32), rgba(56,189,248,.22));
+      color: rgba(230,237,247,.92);
+    }
+    .cat-name{font-size:12px; color: rgba(230,237,247,.84); text-align:center; line-height:1.2}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:12px;
+      padding:14px 16px 16px;
+      border-top:1px solid rgba(230,237,247,.10);
+    }
+    .card{
+      border:1px solid rgba(230,237,247,.12);
+      background: rgba(11,18,34,.62);
+      border-radius: var(--radius);
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height: 150px;
+      transition: transform .12s ease, border-color .12s ease;
+    }
+    .card:hover{transform: translateY(-2px); border-color: rgba(56,189,248,.28)}
+    .card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .card-title{font-weight:900;font-size:13.5px;margin:0}
+    .card-desc{margin:0;color:var(--muted);font-size:12.5px}
+    .tags{display:flex;flex-wrap:wrap;gap:6px}
+    .tag{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(230,237,247,.12);
+      background: rgba(15,23,42,.55);
+      color: rgba(230,237,247,.78);
+    }
+    .card-actions{display:flex;align-items:center;gap:8px;margin-top:auto}
+    .mini{
+      padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(230,237,247,.12);
+      background: rgba(15,23,42,.55);
+      color: rgba(230,237,247,.92);
+      font-size:12px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+    }
+    .mini.primary{
+      background: rgba(56,189,248,.14);
+      border-color: rgba(56,189,248,.30);
+    }
+    .mini:hover{border-color: rgba(56,189,248,.30)}
+    .star{
+      width:34px;height:34px;border-radius:999px;
+      border:1px solid rgba(230,237,247,.12);
+      background: rgba(15,23,42,.55);
+      cursor:pointer;
+      display:inline-flex;align-items:center;justify-content:center;
+    }
+    .star[aria-pressed="true"]{border-color: rgba(56,189,248,.30); background: rgba(56,189,248,.14)}
+    .muted{color:var(--muted)}
+    .rightcol{display:flex;flex-direction:column;gap:12px}
+    .badge{
+      font-size:11px;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(56,189,248,.30);
+      background: rgba(56,189,248,.14);
+      color: rgba(230,237,247,.92);
+    }
+    .foot{
+      margin:18px 0 30px;
+      padding:14px 16px;
+      border-top:1px solid rgba(230,237,247,.10);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    }
+    .foot a{color:rgba(230,237,247,.78)}
+    .foot a:hover{color:#fff}
+    .divider{width:1px;height:12px;background: rgba(230,237,247,.14)}
+    .toast{
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 18px;
+      background: rgba(2,6,23,.85);
+      border: 1px solid rgba(230,237,247,.16);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      color: rgba(230,237,247,.95);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 60;
+      max-width: calc(100vw - 24px);
+      text-align:center;
+    }
+    .toast.show{opacity:1; transform: translateX(-50%) translateY(-6px)}
+    .left-ad{
+      position: fixed;
+      left: 14px;
+      top: 120px;
+      z-index: 30;
+      width: 210px;
+      border: 1px solid rgba(230,237,247,.12);
+      border-radius: 16px;
+      background: rgba(11,18,34,.68);
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      overflow:hidden;
+    }
+    .left-ad-head{
+      padding: 10px 10px 0;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .left-ad-title{font-weight:920;font-size:13px;color: rgba(230,237,247,.92)}
+    .left-ad-body{padding: 10px}
+    .left-ad-body p{margin:0;color: rgba(230,237,247,.72);font-size:12px;line-height:1.55}
+    .left-ad-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .left-ad .mini{padding:7px 10px}
+    @media (max-width: 1220px){
+      .left-ad{display:none}
+    }
+    .float-cta{
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 55;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:flex-end;
+    }
+    .fab{
+      border-radius: 999px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, rgba(34,197,94,1), rgba(56,189,248,.92));
+      color: #041019;
+      border: 1px solid rgba(56,189,248,.40);
+      box-shadow: 0 18px 40px rgba(0,0,0,.30);
+      cursor:pointer;
+      font-size: 13px;
+      display:inline-flex;align-items:center;gap:8px;
+      user-select:none;
+      font-weight:900;
+    }
+    .fab.secondary{
+      background: rgba(15,23,42,.65);
+      color: rgba(230,237,247,.92);
+      border-color: rgba(230,237,247,.16);
+      box-shadow: var(--shadow);
+      font-weight:700;
+    }
+    .inline-ad{
+      grid-column: 1 / -1;
+      border-radius: var(--radius);
+      overflow:hidden;
+    }
+    @media (max-width: 980px){
+      .layout{grid-template-columns: 1fr}
+      .rightcol{order:-1}
+      .brand{min-width:0}
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns: repeat(2, minmax(0, 1fr))}
+    }
+    @media (max-width: 520px){
+      .topbar-inner{flex-wrap:wrap}
+      .brand{width:100%}
+      .actions{width:100%;justify-content:flex-end}
+      .grid{grid-template-columns: 1fr}
+      .float-cta{right: 12px; bottom: 12px}
+      .hero-title{font-size:22px}
+    }
+    @media (max-width: 980px){
+      .rec-grid{grid-template-columns: repeat(2, minmax(0, 1fr))}
+    }
+    @media (max-width: 720px){
+      .rec-grid{grid-template-columns: repeat(1, minmax(0, 1fr))}
+    }
+  </style>
+</head>
+<body>
+  <aside class="left-ad" aria-label="侧边广告">
+    <div class="left-ad-head">
+      <div class="left-ad-title">1bgp 服务器方案</div>
+      <span class="badge">赞助</span>
+    </div>
+    <div class="left-ad-body">
+      <p>适合部署 AI 题库站、讲义站、作业批改台与教研看板；也可搭建“龙虾站”引流页，或对接 ChatGPT 等模型做教学助手。</p>
+      <div class="left-ad-actions">
+        <a class="mini primary" href="https://www.1bgp.com/" target="_blank" rel="noopener noreferrer" data-event="leftad_primary">去官网选型</a>
+        <a class="mini" href="https://www.1bgp.com/" target="_blank" rel="noopener noreferrer" data-event="leftad_secondary">查看套餐</a>
+      </div>
+    </div>
+  </aside>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div class="brand-text">
+          <div class="brand-title">AI 教研增长台</div>
+          <div class="brand-sub">覆盖 · 质量 · 产能</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn ghost" id="showFavs" data-event="nav_show_favs" type="button">只看收藏</button>
+        <button class="btn primary" id="submitTool" data-event="nav_submit_tool" type="button">部署到 1bgp</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero-banner" aria-label="搜索区域">
+      <div class="hero-inner">
+        <h1 class="hero-title">把教研流程做成“可复用生产线”</h1>
+        <div style="margin-top:10px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <span class="pill"><b>覆盖</b>：知识点×题型×难度</span>
+          <span class="pill"><b>质量</b>：歧义/区分度/解析</span>
+          <span class="pill"><b>效率</b>：备课/出题/批改</span>
+        </div>
+
+        <div class="hero-search" role="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2" opacity=".95"/>
+            <path d="M16.2 16.2 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".95"/>
+          </svg>
+          <input id="q" type="text" autocomplete="off" placeholder="搜索：覆盖率/题型分层/讲义结构/Rubric/测验节奏/错题复练…" />
+        </div>
+
+        <div class="hero-meta">
+          <span>当前分类：<b id="activeCat">全部</b></span>
+          <span>匹配结果：<b id="count">0</b></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="recommend-wrap" aria-label="推荐工具">
+      <div class="recommend-head">
+        <div class="recommend-left">
+          <div class="recommend-tabs" role="tablist" aria-label="推荐切换">
+            <button class="seg active" type="button" data-rec="recommend" data-event="rec_tab_recommend" aria-selected="true">高频入口</button>
+            <button class="seg" type="button" data-rec="recent" data-event="rec_tab_recent" aria-selected="false">最近使用</button>
+          </div>
+          <div class="recommend-desc" id="recommendDesc">把“题库指标”和“教研动作”绑定：用清单拉齐标准，用工具拉满产能。</div>
+        </div>
+        <div></div>
+      </div>
+      <div class="recommend-body">
+        <div class="rec-grid" id="recommendGrid" aria-label="推荐工具列表"></div>
+        <div class="rec-hint" id="recommendHint" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <section class="panel" aria-label="工具列表">
+        <div class="tabs" id="tabs" role="tablist" aria-label="分类筛选"></div>
+        <div class="cat-quick" id="catQuick" aria-label="分类图标"></div>
+        <div class="grid" id="grid" aria-live="polite"></div>
+
+        <div class="foot">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span class="muted">© <span id="year"></span> AI 教研增长台</span>
+            <span class="divider" aria-hidden="true"></span>
+            <a href="#" id="openDisclaimer" data-event="open_disclaimer">免责声明</a>
+            <span class="divider" aria-hidden="true"></span>
+            <a href="#" id="openPrivacy" data-event="open_privacy">隐私政策</a>
+          </div>
+          <div class="muted">外链仅供参考，题库内容与合规请自行甄别。</div>
+        </div>
+      </section>
+
+      <aside class="rightcol" aria-label="侧栏">
+        <section class="panel pad">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <div>
+              <div style="font-weight:900">1bgp 全球云服务器 / 物理服务器</div>
+              <div class="muted" style="font-size:12px;margin-top:4px">部署题库站 · 批改台 · 教研看板</div>
+            </div>
+            <span class="badge">推荐</span>
+          </div>
+          <div class="muted" style="font-size:12.5px;margin-top:10px;line-height:1.7">
+            适合：题库内容服务、作业批改接口、知识库与学习数据看板；也可搭建“龙虾站”引流页，或对接 ChatGPT 等模型做教学助手。
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <a class="mini primary" href="https://www.1bgp.com/" target="_blank" rel="noopener noreferrer" data-event="cta_1bgp_primary">去官网选型</a>
+            <a class="mini" href="https://www.1bgp.com/" target="_blank" rel="noopener noreferrer" data-event="cta_1bgp_secondary">查看报价</a>
+          </div>
+        </section>
+
+        <section class="panel pad" style="margin-top:12px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <div>
+              <div style="font-weight:900">sproidc 全球云节点 / 物理机</div>
+              <div class="muted" style="font-size:12px;margin-top:4px">稳带宽 · 抗并发 · 适合数据任务</div>
+            </div>
+            <span class="badge">补位</span>
+          </div>
+          <div class="muted" style="font-size:12.5px;margin-top:10px;line-height:1.7">
+            适合：教研增长台、批改服务接口、学习数据看板与定时任务；支持按需带宽/节点选择，便于多班级同时访问与高并发提交。
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+            <a class="mini primary" href="https://www.sproidc.com/" target="_blank" rel="noopener noreferrer" data-event="cta_sproidc_primary">看看配置</a>
+            <a class="mini" href="https://www.sproidc.com/" target="_blank" rel="noopener noreferrer" data-event="cta_sproidc_secondary">打开官网</a>
+          </div>
+        </section>
+
+        <section class="panel pad" style="margin-top:12px" aria-label="指标口径">
+          <div style="font-weight:900">题库指标口径（可复制）</div>
+          <div class="muted" style="font-size:12.5px;margin-top:10px;line-height:1.7">
+            覆盖率：知识点覆盖/题型覆盖/难度覆盖；质量：歧义率、区分度、解析完整度；效率：单题产出耗时、批改耗时、返工率；节奏：周测/单元测与复练间隔。
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <div class="float-cta">
+    <a class="fab" id="fabMain" href="https://www.1bgp.com/" target="_blank" rel="noopener noreferrer" data-event="fab_1bgp">查看 1bgp 服务器</a>
+    <button class="fab secondary" id="fabTop" data-event="fab_back_top" type="button">回到顶部</button>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const EVENT_PREFIX = "edu2_";
+    const tools = [
+      { name: "知识点覆盖矩阵", desc: "知识点×题型×难度：一眼看出漏点与重复点，指导补题。", url: "https://docs.google.com/spreadsheets", cat: "覆盖率管理", tags: ["覆盖率","网格","台账"] },
+      { name: "题型分层模板", desc: "基础/提高/挑战：分层规则、配比与样例，稳定难度曲线。", url: "https://www.notion.so", cat: "覆盖率管理", tags: ["分层","难度","模板"] },
+      { name: "变式题生成提示词", desc: "同一知识点生成多版本变式题，提升迁移训练。", url: "https://chat.openai.com", cat: "出题自动化", tags: ["变式","迁移","提示词"] },
+      { name: "解析结构清单", desc: "解析要写什么：思路、关键步骤、易错点、替代解法。", url: "https://docs.google.com", cat: "质量控制", tags: ["解析","清单","易错"] },
+      { name: "题目审校清单", desc: "审校：歧义/单位/数据/答案一致性/图表规范。", url: "https://www.notion.so", cat: "质量控制", tags: ["审校","一致性","规范"] },
+      { name: "Rubric 评分表", desc: "统一批改口径：评分点、扣分规则、反馈语句库。", url: "https://docs.google.com", cat: "批改口径", tags: ["rubric","口径","反馈"] },
+      { name: "评语语句库", desc: "把常见错误对应到标准反馈与下一步练习建议。", url: "https://www.notion.so", cat: "批改口径", tags: ["评语","错误","建议"] },
+      { name: "作业批改助手", desc: "用 AI 按 Rubric 输出：分数+理由+改进建议（示例入口）。", url: "https://chat.openai.com", cat: "批改口径", tags: ["批改","反馈","结构化"] },
+      { name: "讲义结构模板", desc: "导入→核心概念→例题→练习→易错点→课堂小结→作业建议。", url: "https://docs.google.com", cat: "讲义生产", tags: ["讲义","结构","模板"] },
+      { name: "课堂提问脚本", desc: "课堂追问链：提示-追问-纠错-迁移，提升参与度。", url: "https://chat.openai.com", cat: "讲义生产", tags: ["提问","互动","脚本"] },
+      { name: "课程节奏周计划", desc: "单元拆课时，安排周测/单元测与复练间隔。", url: "https://docs.google.com/spreadsheets", cat: "课程节奏", tags: ["周计划","节奏","测验"] },
+      { name: "错题复练策略", desc: "错因分类+复练间隔（1-3-7-14），把错误变成训练素材。", url: "https://www.notion.so", cat: "课程节奏", tags: ["错题","复练","间隔"] },
+      { name: "学习数据看板", desc: "把测验/作业数据做成看板：错因、掌握度、进步曲线。", url: "https://www.metabase.com", cat: "学习分析", tags: ["看板","数据","复盘"] },
+      { name: "问卷/反馈收集", desc: "课后收集困难点：用于下一轮补题与讲义优化。", url: "https://tally.so", cat: "学习分析", tags: ["问卷","反馈","收集"] },
+      { name: "Notion 教研知识库", desc: "把题库、讲义、Rubric、清单统一管理，方便协作与版本控制。", url: "https://www.notion.so", cat: "教研运营", tags: ["协作","版本","知识库"] },
+      { name: "Canva 讲义排版", desc: "把讲义做成可投屏/可打印的课堂卡片与作业单。", url: "https://www.canva.com", cat: "教研运营", tags: ["排版","卡片","素材"] },
+      { name: "Overleaf 试卷排版", desc: "公式友好：适合数学/理工科试卷与讲义排版。", url: "https://www.overleaf.com", cat: "教研运营", tags: ["排版","公式","试卷"] },
+      { name: "Google Classroom", desc: "布置作业与收集提交：轻量班级管理。", url: "https://classroom.google.com", cat: "教学交付", tags: ["作业","班级","提交"] },
+      { name: "Moodle", desc: "开源 LMS：课程、测验、作业与成绩管理（可自部署）。", url: "https://moodle.org", cat: "教学交付", tags: ["LMS","开源","自部署"] }
+    ];
+
+    const LS_KEY = "aiedu2:favs";
+    const REC_KEY = "aiedu2:recent";
+    const state = {
+      activeCat: "全部",
+      q: "",
+      favOnly: false,
+      favs: new Set()
+    };
+
+    const els = {
+      q: document.getElementById("q"),
+      tabs: document.getElementById("tabs"),
+      catQuick: document.getElementById("catQuick"),
+      grid: document.getElementById("grid"),
+      activeCat: document.getElementById("activeCat"),
+      count: document.getElementById("count"),
+      showFavs: document.getElementById("showFavs"),
+      year: document.getElementById("year"),
+      toast: document.getElementById("toast"),
+      fabMain: document.getElementById("fabMain"),
+      fabTop: document.getElementById("fabTop"),
+      submitTool: document.getElementById("submitTool"),
+      openDisclaimer: document.getElementById("openDisclaimer"),
+      openPrivacy: document.getElementById("openPrivacy"),
+      recommendGrid: document.getElementById("recommendGrid"),
+      recommendDesc: document.getElementById("recommendDesc"),
+      recommendHint: document.getElementById("recommendHint")
+    };
+
+    function getCategories(items){
+      const set = new Set(items.map(x => x.cat));
+      return ["全部", ...Array.from(set).sort((a,b) => a.localeCompare(b, "zh-Hans-CN"))];
+    }
+
+    function normalize(s){return (s || "").toLowerCase().trim();}
+
+    function matchesQuery(item, q){
+      if(!q) return true;
+      const hay = [
+        item.name,
+        item.desc,
+        item.cat,
+        ...(item.tags || [])
+      ].join(" ").toLowerCase();
+      return hay.includes(q);
+    }
+
+    function shouldShow(item){
+      if(state.activeCat !== "全部" && item.cat !== state.activeCat) return false;
+      if(state.favOnly && !state.favs.has(item.name)) return false;
+      if(!matchesQuery(item, state.q)) return false;
+      return true;
+    }
+
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function toast(msg){
+      els.toast.textContent = msg;
+      els.toast.classList.add("show");
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => els.toast.classList.remove("show"), 1600);
+    }
+
+    function track(el){
+      const ev = el?.dataset?.event;
+      if(!ev) return;
+      window.__events = window.__events || [];
+      window.__events.push({ event: EVENT_PREFIX + ev, ts: Date.now() });
+    }
+
+    function saveFavs(){
+      localStorage.setItem(LS_KEY, JSON.stringify(Array.from(state.favs)));
+    }
+
+    function loadFavs(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        if(!raw) return;
+        const arr = JSON.parse(raw);
+        if(Array.isArray(arr)) state.favs = new Set(arr);
+      }catch(_){}
+    }
+
+    function loadRecents(){
+      try{
+        const raw = localStorage.getItem(REC_KEY);
+        if(!raw) return [];
+        const arr = JSON.parse(raw);
+        return Array.isArray(arr) ? arr.filter(Boolean) : [];
+      }catch(_){
+        return [];
+      }
+    }
+
+    function saveRecents(list){
+      try{
+        localStorage.setItem(REC_KEY, JSON.stringify(list.slice(0, 12)));
+      }catch(_){}
+    }
+
+    function pushRecent(name){
+      if(!name) return;
+      const list = loadRecents();
+      const next = [name, ...list.filter(x => x !== name)].slice(0, 12);
+      saveRecents(next);
+    }
+
+    function updateCounts(filteredCount){
+      if(typeof filteredCount === "number") els.count.textContent = String(filteredCount);
+    }
+
+    function renderTabs(){
+      const categories = getCategories(tools);
+      els.tabs.innerHTML = categories.map(cat => {
+        const active = cat === state.activeCat ? "active" : "";
+        return `<button class="tab ${active}" type="button" role="tab" aria-selected="${active ? "true" : "false"}" data-cat="${escapeHtml(cat)}" data-event="tab_${escapeHtml(cat)}">${escapeHtml(cat)}</button>`;
+      }).join("");
+    }
+
+    function iconSvg(cat){
+      const map = {
+        "覆盖率管理": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 16v-5m4 5V7m4 9v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+        "质量控制": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        "出题自动化": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 4h10a2 2 0 0 1 2 2v14H7a2 2 0 0 0-2 2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/><path d="M9 8h8M9 12h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+        "批改口径": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 7h10v14H7V7Z" stroke="currentColor" stroke-width="2"/><path d="M9 3h6v4H9V3Z" stroke="currentColor" stroke-width="2"/><path d="m9 14 2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+        "讲义生产": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h12a3 3 0 0 1 3 3v11H7a3 3 0 0 0-3 3V5Z" stroke="currentColor" stroke-width="2"/><path d="M8 9h7M8 13h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+        "课程节奏": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 4h12v16H6V4Z" stroke="currentColor" stroke-width="2"/><path d="M9 8h6M9 12h6M9 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+        "学习分析": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 16v-5m4 5V7m4 9v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+        "教研运营": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 3 8v8l9 5 9-5V8l-9-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 12 3 8m9 4 9-4" stroke="currentColor" stroke-width="2" opacity=".85"/></svg>`,
+        "教学交付": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 18a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4H11l-4 3v-3H7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`
+      };
+      return map[cat] || `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" stroke="currentColor" stroke-width="2"/><path d="M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+    }
+
+    function toolIconSvg(){
+      return `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" stroke="currentColor" stroke-width="2"/><path d="M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`;
+    }
+
+    function toolIconHtml(tool){
+      if(tool?.icon){
+        return `<img src="${escapeHtml(tool.icon)}" alt="${escapeHtml(tool.name)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" data-icon-name="${escapeHtml(tool.name)}" />`;
+      }
+      return toolIconSvg();
+    }
+
+    function attachIconFallback(root){
+      if(!root) return;
+      root.querySelectorAll('img[data-icon-name]').forEach(img => {
+        img.addEventListener("error", () => {
+          const wrap = img.parentElement;
+          if(!wrap) return;
+          wrap.innerHTML = toolIconSvg();
+        }, { once: true });
+      });
+    }
+
+    function renderRecommend(mode){
+      const prefer = ["知识点覆盖矩阵","题型分层模板","题目审校清单","Rubric 评分表","课程节奏周计划","学习数据看板","Notion 教研知识库"];
+      let list = [];
+      if(mode === "recent"){
+        const recentNames = loadRecents();
+        list = recentNames.map(n => tools.find(t => t.name === n)).filter(Boolean);
+        if(els.recommendDesc) els.recommendDesc.textContent = "你最近点过的工具（本地记录，不上传）。";
+        if(els.recommendHint) els.recommendHint.textContent = list.length ? "" : "暂无最近使用记录。点击下方工具卡片后，这里会自动出现。";
+      }else{
+        const picked = [];
+        for(const n of prefer){
+          const t = tools.find(x => x.name === n);
+          if(t) picked.push(t);
+        }
+        for(const t of tools){
+          if(!picked.some(x => x.name === t.name)) picked.push(t);
+        }
+        list = picked;
+        if(els.recommendDesc) els.recommendDesc.textContent = "优先推荐“覆盖/质量/口径/节奏”高频入口，向下滚动可继续浏览。";
+        if(els.recommendHint) els.recommendHint.textContent = "";
+      }
+
+      if(!els.recommendGrid) return;
+      els.recommendGrid.innerHTML = list.slice(0, 12).map(t => `
+        <a class="rec-card" href="${escapeHtml(t.url)}" target="_blank" rel="noopener noreferrer" data-event="rec_open_${escapeHtml(t.name)}" data-tool="${escapeHtml(t.name)}" aria-label="${escapeHtml(t.name)}">
+          <span class="rec-icon">${toolIconHtml(t)}</span>
+          <span class="rec-text">
+            <span class="rec-name">${escapeHtml(t.name)}</span>
+            <span class="rec-sub">${escapeHtml(t.desc || "")}</span>
+          </span>
+        </a>
+      `).join("");
+      attachIconFallback(els.recommendGrid);
+
+      els.recommendGrid.querySelectorAll("a").forEach(a => {
+        a.addEventListener("click", (e) => {
+          track(e.currentTarget);
+          const name = e.currentTarget.getAttribute("data-tool") || "";
+          pushRecent(name);
+        });
+      });
+    }
+
+    function renderCatQuick(){
+      if(!els.catQuick) return;
+      const categories = getCategories(tools).filter(x => x !== "全部");
+      const list = categories.slice(0, 16);
+      els.catQuick.innerHTML = list.map(cat => {
+        const active = cat === state.activeCat ? "active" : "";
+        return `
+          <button class="cat-btn ${active}" type="button" data-cat="${escapeHtml(cat)}" data-event="cat_${escapeHtml(cat)}" aria-label="${escapeHtml(cat)}">
+            <span class="cat-ico">${iconSvg(cat)}</span>
+            <span class="cat-name">${escapeHtml(cat)}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderInlineAd(){
+      return `
+        <div class="panel inline-ad" role="region" aria-label="信息流广告">
+          <div style="padding:12px 12px 0; display:flex; align-items:center; justify-content:space-between; gap:10px">
+            <span class="muted">信息流广告</span>
+            <span class="badge">赞助</span>
+          </div>
+          <div style="margin:12px; border:1px solid rgba(230,237,247,.10); border-radius: 12px; padding:12px; background: rgba(11,18,34,.55)">
+            <div style="font-weight:900">1bgp 全球云服务器 / 物理服务器</div>
+            <div class="muted" style="margin-top:6px; font-size:12.5px; line-height:1.6">适合部署题库站、批改台与学习数据看板；也可以搭建“龙虾站”引流页，或对接 ChatGPT 等模型做教学助手。</div>
+            <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap">
+              <a class="mini primary" href="https://www.1bgp.com/" target="_blank" rel="noopener noreferrer" data-event="ad_feed_click">查看配置</a>
+              <a class="mini" href="https://www.1bgp.com/" target="_blank" rel="noopener noreferrer" data-event="ad_feed_contact">进入官网</a>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGrid(){
+      const list = tools.filter(shouldShow);
+      els.activeCat.textContent = state.activeCat;
+      updateCounts(list.length);
+
+      if(list.length === 0){
+        els.grid.innerHTML = `
+          <div class="card" style="grid-column:1 / -1">
+            <div class="card-title">没有匹配结果</div>
+            <p class="card-desc">尝试更换分类或减少关键词，或取消“只看收藏”。</p>
+            <div class="card-actions">
+              <button class="mini primary" type="button" id="resetFilters" data-event="reset_filters">重置筛选</button>
+              <button class="mini" type="button" id="openCtaEmpty" data-event="cta_from_empty">领取指标口径包</button>
+            </div>
+          </div>
+        `;
+        document.getElementById("resetFilters").addEventListener("click", (e) => {
+          track(e.currentTarget);
+          state.activeCat = "全部";
+          state.q = "";
+          state.favOnly = false;
+          els.q.value = "";
+          els.showFavs.textContent = "只看收藏";
+          renderTabs();
+          renderCatQuick();
+          renderGrid();
+          toast("已重置筛选");
+        });
+        document.getElementById("openCtaEmpty").addEventListener("click", (e) => {
+          track(e.currentTarget);
+          toast("示例入口：可替换为资料领取表单/社群二维码");
+        });
+        return;
+      }
+
+      const nodes = [];
+      const insertAt = Math.min(6, list.length);
+      list.forEach((item, idx) => {
+        if(idx === insertAt) nodes.push(renderInlineAd());
+        const fav = state.favs.has(item.name);
+        nodes.push(`
+          <article class="card" data-name="${escapeHtml(item.name)}" data-cat="${escapeHtml(item.cat)}">
+            <div class="card-head">
+              <div>
+                <h3 class="card-title">${escapeHtml(item.name)}</h3>
+                <p class="card-desc">${escapeHtml(item.desc)}</p>
+              </div>
+              <button class="star" type="button" aria-label="收藏" aria-pressed="${fav ? "true" : "false"}" data-fav="${escapeHtml(item.name)}" data-event="fav_toggle">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 17.3 6.2 20.6l1.1-6.6L2.6 9.7l6.6-1 2.8-6 2.8 6 6.6 1-4.7 4.3 1.1 6.6L12 17.3Z" stroke="currentColor" stroke-width="2" opacity="${fav ? "1" : ".7"}" fill="${fav ? "rgba(56,189,248,.20)" : "transparent"}"/>
+                </svg>
+              </button>
+            </div>
+            <div class="tags">
+              <span class="tag">${escapeHtml(item.cat)}</span>
+              ${(item.tags || []).slice(0,3).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("")}
+            </div>
+            <div class="card-actions">
+              <a class="mini primary" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer" data-event="tool_open" data-tool="${escapeHtml(item.name)}">访问</a>
+              <button class="mini" type="button" data-event="tool_copy" data-copy="${escapeHtml(item.name)}｜${escapeHtml(item.url)}">复制链接</button>
+            </div>
+          </article>
+        `);
+      });
+      els.grid.innerHTML = nodes.join("");
+
+      els.grid.querySelectorAll("[data-fav]").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          track(e.currentTarget);
+          const name = e.currentTarget.getAttribute("data-fav");
+          if(!name) return;
+          if(state.favs.has(name)) state.favs.delete(name);
+          else state.favs.add(name);
+          saveFavs();
+          renderGrid();
+          toast(state.favs.has(name) ? "已收藏" : "已取消收藏");
+        });
+      });
+
+      els.grid.querySelectorAll("[data-copy]").forEach(btn => {
+        btn.addEventListener("click", async (e) => {
+          track(e.currentTarget);
+          const text = e.currentTarget.getAttribute("data-copy") || "";
+          try{
+            await navigator.clipboard.writeText(text);
+            toast("已复制到剪贴板");
+          }catch(_){
+            const ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed";
+            ta.style.left = "-9999px";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            ta.remove();
+            toast("已复制到剪贴板");
+          }
+        });
+      });
+
+      els.grid.querySelectorAll('a[data-event="tool_open"]').forEach(a => {
+        a.addEventListener("click", (e) => {
+          track(e.currentTarget);
+          const name = e.currentTarget.getAttribute("data-tool") || "";
+          pushRecent(name);
+        });
+      });
+
+      els.grid.querySelectorAll('[data-event^="ad_"]').forEach(a => {
+        a.addEventListener("click", (e) => track(e.currentTarget));
+      });
+    }
+
+    function setActiveCat(cat){
+      state.activeCat = cat;
+      renderTabs();
+      renderCatQuick();
+      renderGrid();
+    }
+
+    function init(){
+      loadFavs();
+      els.year.textContent = String(new Date().getFullYear());
+      renderRecommend("recommend");
+      renderTabs();
+      renderCatQuick();
+      renderGrid();
+
+      const recTabs = document.querySelectorAll("[data-rec]");
+      recTabs.forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          track(e.currentTarget);
+          const mode = e.currentTarget.getAttribute("data-rec") || "recommend";
+          recTabs.forEach(x => {
+            const active = x === e.currentTarget;
+            x.classList.toggle("active", active);
+            x.setAttribute("aria-selected", active ? "true" : "false");
+          });
+          renderRecommend(mode);
+        });
+      });
+
+      els.q.addEventListener("input", () => {
+        state.q = normalize(els.q.value);
+        renderGrid();
+      });
+
+      els.tabs.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-cat]");
+        if(!btn) return;
+        track(btn);
+        const cat = btn.getAttribute("data-cat");
+        if(!cat) return;
+        setActiveCat(cat);
+      });
+
+      if(els.catQuick){
+        els.catQuick.addEventListener("click", (e) => {
+          const btn = e.target.closest("[data-cat]");
+          if(!btn) return;
+          track(btn);
+          const cat = btn.getAttribute("data-cat");
+          if(!cat) return;
+          setActiveCat(cat);
+        });
+      }
+
+      els.showFavs.addEventListener("click", (e) => {
+        track(e.currentTarget);
+        state.favOnly = !state.favOnly;
+        els.showFavs.textContent = state.favOnly ? "显示全部" : "只看收藏";
+        renderGrid();
+        toast(state.favOnly ? "仅显示收藏" : "显示全部");
+      });
+
+      els.fabTop.addEventListener("click", (e) => {
+        track(e.currentTarget);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      els.submitTool.addEventListener("click", (e) => {
+        track(e.currentTarget);
+        window.open("https://www.1bgp.com/", "_blank", "noopener,noreferrer");
+      });
+
+      document.getElementById("openDisclaimer")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        track(e.currentTarget);
+        toast("免责声明：本站内容仅供参考，外链服务与风险由第三方承担。");
+      });
+
+      document.getElementById("openPrivacy")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        track(e.currentTarget);
+        toast("隐私政策：收藏与最近使用仅保存在你的浏览器本地，不会上传。");
+      });
+
+      document.querySelectorAll('[data-event^="ad_"]').forEach(a => {
+        a.addEventListener("click", (e) => track(e.currentTarget));
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>
